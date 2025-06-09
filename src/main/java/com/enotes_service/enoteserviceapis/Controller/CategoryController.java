@@ -1,5 +1,7 @@
 package com.enotes_service.enoteserviceapis.Controller;
 
+import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
+import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
 import com.enotes_service.enoteserviceapis.Service.CategoryService;
 import com.enotes_service.enoteserviceapis.Service.ServiceImpl.CategoryServiceImpl;
@@ -21,8 +23,8 @@ public class CategoryController {
 
 
    @PostMapping("/category")
-   public ResponseEntity<?> saveCategory(@RequestBody Category category) {
-       boolean savedCategory = service.saveCategory(category);
+   public ResponseEntity<?> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+       boolean savedCategory = service.saveCategory(categoryDTO);
        if (savedCategory) {
            return new ResponseEntity<>("Saved Succefully", HttpStatus.CREATED);
        } else {
@@ -35,7 +37,7 @@ public class CategoryController {
     @GetMapping("/category")
     public ResponseEntity<?> getAllCategory(){
 
-     List<Category> allCategory=service.getAllCategory();
+     List<CategoryDTO> allCategory=service.getAllCategory();
      if(CollectionUtils.isEmpty(allCategory)){
 
         return ResponseEntity.noContent().build();
@@ -43,4 +45,20 @@ public class CategoryController {
          return new ResponseEntity<>(allCategory,HttpStatus.OK);
      }
 
-}}
+}
+
+
+@GetMapping("/isActive-Category")
+public ResponseEntity<?> getActiveCategory(){
+
+       List<CategoryResponse> activeCategory=service.getisActiveTrue();
+    if(CollectionUtils.isEmpty(activeCategory)){
+
+        return ResponseEntity.noContent().build();
+    }else{
+        return new  ResponseEntity<>(activeCategory,HttpStatus.OK);
+    }
+
+}
+
+}
