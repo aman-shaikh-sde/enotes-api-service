@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -59,6 +60,23 @@ public ResponseEntity<?> getActiveCategory(){
         return new  ResponseEntity<>(activeCategory,HttpStatus.OK);
     }
 
+}
+
+@GetMapping("/category/{id}")
+public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
+
+       CategoryDTO categoryDTO=service.getCategoryById(id);
+       if(ObjectUtils.isEmpty(categoryDTO)){
+           return new ResponseEntity<>("Category not found with id "+id,HttpStatus.NOT_FOUND);
+       }
+       return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
+}
+
+@DeleteMapping("/category/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
+
+       this.service.deleteCategory(id);
+return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
 }
 
 }
