@@ -2,7 +2,6 @@ package com.enotes_service.enoteserviceapis.Service;
 
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
-import com.enotes_service.enoteserviceapis.Entity.Category;
 
 import java.util.List;
 
@@ -13,4 +12,6 @@ public interface CategoryService {
 
 
     List<CategoryResponse> getisActiveTrue();
+    public CategoryDTO getCategoryById(Integer id);
+    public void deleteCategory(Integer id);
 }

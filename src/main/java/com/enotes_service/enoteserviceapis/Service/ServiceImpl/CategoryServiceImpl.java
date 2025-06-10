@@ -12,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -56,5 +57,25 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryResponse> categoryResponses = activeCategory.stream().map(cat -> mapper.map(cat, CategoryResponse.class)).toList();
     return categoryResponses;
     }
+
+    public CategoryDTO getCategoryById(Integer id) {
+        Optional<Category> findByCategory=categoryRepo.findById(id);
+
+        if(findByCategory.isPresent()){
+                    Category category= findByCategory.get();
+        return mapper.map(category,CategoryDTO.class);
+        }
+        return null;
+    }
+
+
+
+    @Override
+    public void deleteCategory(Integer id) {
+        Category CatId=categoryRepo.findById(id).orElse(new Category());
+        this.categoryRepo.delete(CatId);
+
+    }
+
 }
     
