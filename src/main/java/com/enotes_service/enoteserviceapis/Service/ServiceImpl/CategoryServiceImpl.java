@@ -3,6 +3,7 @@ package com.enotes_service.enoteserviceapis.Service.ServiceImpl;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
+import com.enotes_service.enoteserviceapis.Exception.ResourceNotFoundException;
 import com.enotes_service.enoteserviceapis.Repository.CategoryRepo;
 import com.enotes_service.enoteserviceapis.Service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.management.relation.RelationNotFoundException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -79,11 +81,11 @@ public class CategoryServiceImpl implements CategoryService {
     return categoryResponses;
     }
 
-    public CategoryDTO getCategoryById(Integer id) {
-        Optional<Category> findByCategory=categoryRepo.findById(id);
+    public CategoryDTO getCategoryById(Integer id) throws Exception{
+        Category category=categoryRepo.findById(id).
+                orElseThrow(()->new ResourceNotFoundException("Id Not Found"+id));
 
-        if(findByCategory.isPresent()){
-                    Category category= findByCategory.get();
+        if(!ObjectUtils.isEmpty(category)){
         return mapper.map(category,CategoryDTO.class);
         }
         return null;

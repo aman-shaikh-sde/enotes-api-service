@@ -63,13 +63,13 @@ public ResponseEntity<?> getActiveCategory(){
 }
 
 @GetMapping("/category/{id}")
-public ResponseEntity<?> getCategoryById(@PathVariable Integer id){
+public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception {
+    CategoryDTO categoryDTO = service.getCategoryById(id);
+    if (ObjectUtils.isEmpty(categoryDTO)) {
+        return new ResponseEntity<>("Category not found with id " + id, HttpStatus.NOT_FOUND);
 
-       CategoryDTO categoryDTO=service.getCategoryById(id);
-       if(ObjectUtils.isEmpty(categoryDTO)){
-           return new ResponseEntity<>("Category not found with id "+id,HttpStatus.NOT_FOUND);
-       }
-       return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
+    }
+    return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
 }
 
 @DeleteMapping("/category/{id}")
