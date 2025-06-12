@@ -5,6 +5,7 @@ import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
 import com.enotes_service.enoteserviceapis.Service.CategoryService;
 import com.enotes_service.enoteserviceapis.Service.ServiceImpl.CategoryServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class CategoryController {
 
 
    @PostMapping("/category")
-   public ResponseEntity<?> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+   public ResponseEntity<?> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
        boolean savedCategory = service.saveCategory(categoryDTO);
        if (savedCategory) {
            return new ResponseEntity<>("Saved Succefully", HttpStatus.CREATED);
