@@ -35,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (ObjectUtils.isEmpty(category.getId())){
             category.setDeleted(false);
-        category.setCreatedBy(1);
+            //   category.setCreatedBy(1);
         category.setCreatedDate(new Date());
         category.setActive(categoryDTO.isActive());
     }else{
@@ -57,8 +57,8 @@ public class CategoryServiceImpl implements CategoryService {
 
             category.setCreatedBy(existCategory.getCreatedBy());
             category.setCreatedDate(existCategory.getCreatedDate());
-            category.setUpdatedDate(new Date());
-            category.setUpdatedBy(1);
+    //            category.setUpdatedDate(new Date());
+    //            category.setUpdatedBy(1);
         }
 
 
