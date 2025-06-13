@@ -3,23 +3,21 @@ package com.enotes_service.enoteserviceapis.Service.ServiceImpl;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
-import com.enotes_service.enoteserviceapis.Exception.ExistDataException;
 import com.enotes_service.enoteserviceapis.Exception.ResourceNotFoundException;
 import com.enotes_service.enoteserviceapis.Repository.CategoryRepo;
 import com.enotes_service.enoteserviceapis.Service.CategoryService;
-import com.enotes_service.enoteserviceapis.Util.Validation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.management.relation.RelationNotFoundException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class
-CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private ModelMapper mapper;
@@ -28,56 +26,44 @@ CategoryServiceImpl implements CategoryService {
     private CategoryRepo categoryRepo;
 
 
-    @Autowired
-    private Validation validation;
 
     @Override
-    public Boolean saveCategory(CategoryDTO categoryDTO) {
+    public boolean saveCategory(CategoryDTO categoryDTO) {
 
-        // Validation Checking
-        validation.categoryValidation(categoryDTO);
-
-        // check category exist or not
-        Boolean exist = categoryRepo.existsByName(categoryDTO.getName().trim());
-        if (exist) {
-            // throw error
-            throw new ExistDataException("Category already exist");
-        }
 
         Category category = mapper.map(categoryDTO, Category.class);
 
-        if (ObjectUtils.isEmpty(category.getId())) {
-            category.setIsDeleted(false);
-//			category.setCreatedBy(1);
-            category.setCreatedDate(new Date());
-        } else {
+        if (ObjectUtils.isEmpty(category.getId())){
+            category.setDeleted(false);
+        category.setCreatedBy(1);
+        category.setCreatedDate(new Date());
+        category.setActive(categoryDTO.isActive());
+    }else{
             updateCategory(category);
         }
+        Category saveCategory =categoryRepo.save(category);
 
-        Category saveCategory = categoryRepo.save(category);
-        if (ObjectUtils.isEmpty(saveCategory)) {
+        if(ObjectUtils.isEmpty(saveCategory)){
             return false;
         }
         return true;
     }
 
     private void updateCategory(Category category) {
-        Optional<Category> findById = categoryRepo.findById(category.getId());
-        if (findById.isPresent()) {
+
+        Optional<Category> findById=categoryRepo.findById(category.getId());
+        if(findById.isPresent()) {
             Category existCategory = findById.get();
+
             category.setCreatedBy(existCategory.getCreatedBy());
             category.setCreatedDate(existCategory.getCreatedDate());
-            category.setIsDeleted(existCategory.getIsDeleted()
-            );
-
-//			category.setUpdatedBy(1);
-//			category.setUpdatedOn(new Date());
+            category.setUpdatedDate(new Date());
+            category.setUpdatedBy(1);
         }
+
+
+
     }
-
-
-
-    
 
 
     @Override
