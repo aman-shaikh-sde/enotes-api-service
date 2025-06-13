@@ -18,10 +18,8 @@ public class Category extends BaseModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank
-    @Size(min=5,max = 50, message = "Name must be at most 50 characters long")
     private String name;
-    @NotBlank
-    @Size(min=5,max = 50, message = "Name must be at most 50 characters long")
     private String description;
+    private Boolean isActive;
+    private Boolean isDeleted;
     }

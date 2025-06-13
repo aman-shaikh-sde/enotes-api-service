@@ -15,10 +15,9 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
-public class BaseModel  {
+public abstract class BaseModel  {
 
-    private boolean isActive;
-    private boolean isDeleted;
+
     @CreatedBy
     private int createdBy;
     @CreatedDate
