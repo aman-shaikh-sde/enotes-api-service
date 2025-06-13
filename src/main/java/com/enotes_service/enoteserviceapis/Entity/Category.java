@@ -17,9 +17,10 @@ import java.util.Date;
 public class Category extends BaseModel{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String name;
     private String description;
     private Boolean isActive;
-    private Boolean isDeleted;
-    }
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
+}
