@@ -28,16 +28,16 @@ public class CategoryServiceImpl implements CategoryService {
 
 
     @Override
-    public boolean saveCategory(CategoryDTO categoryDTO) {
+    public Boolean saveCategory(CategoryDTO categoryDTO) {
 
 
         Category category = mapper.map(categoryDTO, Category.class);
 
         if (ObjectUtils.isEmpty(category.getId())){
-            category.setDeleted(false);
+            category.setIsDeleted(false);
         category.setCreatedBy(1);
         category.setCreatedDate(new Date());
-        category.setActive(categoryDTO.isActive());
+        category.setIsActive(categoryDTO.isActive());
     }else{
             updateCategory(category);
         }
