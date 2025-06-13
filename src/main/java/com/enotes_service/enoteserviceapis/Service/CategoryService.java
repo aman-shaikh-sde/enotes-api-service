@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public boolean saveCategory(CategoryDTO categoryDTO);
+    public Boolean saveCategory(CategoryDTO categoryDTO);
     public List<CategoryDTO> getAllCategory();
 
 
     List<CategoryResponse> getisActiveTrue();
     public CategoryDTO getCategoryById(Integer id) throws Exception;
-    public void deleteCategory(Integer id);
+    public Boolean deleteCategory(Integer id);
 }

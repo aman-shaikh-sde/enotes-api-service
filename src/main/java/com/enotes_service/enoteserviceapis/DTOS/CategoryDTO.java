@@ -10,12 +10,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class CategoryDTO {
 
-    private int id;
+    private Integer id;
     private String name;
     private String description;
-    private boolean isActive;
-    private int createdBy;
+    private Boolean isActive;
+    private Integer createdBy;
     private Date createdDate;
-    private int updatedBy;
+    private Integer updatedBy;
     private Date updatedDate;
 }

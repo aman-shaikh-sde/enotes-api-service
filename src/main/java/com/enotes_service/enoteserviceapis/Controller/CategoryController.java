@@ -73,11 +73,13 @@ public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Except
     return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
 }
 
-@DeleteMapping("/category/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer id){
-
-       this.service.deleteCategory(id);
-return new ResponseEntity<>("Deleted Successfully",HttpStatus.OK);
-}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
+        Boolean deleted = service.deleteCategory(id);
+        if (deleted) {
+            return new ResponseEntity<>("Category deleted success", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Category Not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }

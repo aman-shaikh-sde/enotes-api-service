@@ -15,17 +15,21 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
-public class BaseModel  {
+public abstract class BaseModel  {
 
-    private boolean isActive;
-    private boolean isDeleted;
     @CreatedBy
-    private int createdBy;
+    @Column(updatable = false)
+    private Integer createdBy;
+
     @CreatedDate
+    @Column(updatable = false)
     private Date createdDate;
+
     @LastModifiedBy
-    private int updatedBy;
     @Column(insertable = false)
+    private Integer updatedBy;
+
     @LastModifiedDate
+    @Column(insertable = false)
     private Date updatedDate;
 }

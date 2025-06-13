@@ -1,5 +1,6 @@
 package com.enotes_service.enoteserviceapis.Util;
 
+
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Component;
@@ -11,7 +12,7 @@ import java.util.Map;
 @Component
 public class Validation {
 
-    public void categoryValidation(CategoryDTO categoryDTO) {
+    public void categoryValidation(CategoryDTO  categoryDTO) {
 
         Map<String, Object> error = new LinkedHashMap<>();
 
@@ -37,20 +38,18 @@ public class Validation {
             }
 
             // validation isActive
-            if (ObjectUtils.isEmpty(categoryDTO.isActive())) {
+            if (ObjectUtils.isEmpty(categoryDTO.getIsActive())) {
                 error.put("isActive", "isActive field is empty or null");
             } else {
-                if (categoryDTO.isActive() != Boolean.TRUE.booleanValue()
-                        && categoryDTO.isActive() != Boolean.FALSE.booleanValue()) {
+                if (categoryDTO.getIsActive() != Boolean.TRUE.booleanValue()
+                        && categoryDTO.getIsActive() != Boolean.FALSE.booleanValue()) {
                     error.put("isActive", "invalid value isActive field ");
                 }
+
             }
         }
-
         if (!error.isEmpty()) {
-            throw new ValidationException(String.valueOf(error));
+            throw new ValidationException(error.toString());
         }
-
     }
-
 }
