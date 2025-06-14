@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     private Validation validation;
 
     @Override
-    public Boolean saveCategory(CategoryDTO categoryDTO) {
+    public CategoryDTO saveCategory(CategoryDTO categoryDTO) {
 
         // Validation Checking
 		validation.categoryValidation(categoryDTO);
@@ -50,17 +50,17 @@ public class CategoryServiceImpl implements CategoryService {
 		if (ObjectUtils.isEmpty(category.getId())) {
         category.setIsDeleted(false);
 //			category.setCreatedBy(1);
+            category.setUpdatedDate(null);
+            category.setUpdatedBy(null);
         category.setCreatedDate(new Date());
     } else {
         updateCategory(category);
     }
 
     Category saveCategory = categoryRepo.save(category);
-		if(ObjectUtils.isEmpty(saveCategory)) {
-        return false;
+        return mapper.map(saveCategory, CategoryDTO.class);
+
     }
-		return true;
-}
 
 private void updateCategory(Category category) {
     Optional<Category> findById = categoryRepo.findById(category.getId());
