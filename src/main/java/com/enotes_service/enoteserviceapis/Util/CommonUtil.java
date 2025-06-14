@@ -1,5 +1,6 @@
-package com.enotes_service.enoteserviceapis.Handler;
+package com.enotes_service.enoteserviceapis.Util;
 
+import com.enotes_service.enoteserviceapis.Handler.GenricResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

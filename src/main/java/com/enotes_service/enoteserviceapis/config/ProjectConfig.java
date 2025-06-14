@@ -11,9 +11,11 @@ public class ProjectConfig {
     public ModelMapper mapper(){
         return new ModelMapper();
     }
+
     @Bean
-    public AuditorAware<Integer> auditAware(){
+    public AuditorAware<Integer> auditAware() {
         return new AuditAwareConfig();
     }
+
 
 }

@@ -2,9 +2,7 @@ package com.enotes_service.enoteserviceapis.Controller;
 
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
-import com.enotes_service.enoteserviceapis.Entity.Category;
-import com.enotes_service.enoteserviceapis.Handler.CommonUtil;
-import com.enotes_service.enoteserviceapis.Service.CategoryService;
+import com.enotes_service.enoteserviceapis.Util.CommonUtil;
 import com.enotes_service.enoteserviceapis.Service.ServiceImpl.CategoryServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
