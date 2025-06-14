@@ -3,6 +3,7 @@ package com.enotes_service.enoteserviceapis.Controller;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.CategoryResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
+import com.enotes_service.enoteserviceapis.Handler.CommonUtil;
 import com.enotes_service.enoteserviceapis.Service.CategoryService;
 import com.enotes_service.enoteserviceapis.Service.ServiceImpl.CategoryServiceImpl;
 import jakarta.validation.Valid;
@@ -26,11 +27,13 @@ public class CategoryController {
 
    @PostMapping("/category")
    public ResponseEntity<?> saveCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
-       boolean savedCategory = service.saveCategory(categoryDTO);
-       if (savedCategory) {
-           return new ResponseEntity<>("Saved Succefully", HttpStatus.CREATED);
+       CategoryDTO savedCategory = service.saveCategory(categoryDTO);
+       if (!ObjectUtils.isEmpty(savedCategory)) {
+           return CommonUtil.createBuildResponseMessage("Category Saved Successfully",HttpStatus.CREATED,savedCategory);
+           //return new ResponseEntity<>("Saved Succefully", HttpStatus.CREATED);
        } else {
-           return new ResponseEntity<>("Not Saved",HttpStatus.INTERNAL_SERVER_ERROR);
+           return CommonUtil.createErrorResponseMessage("Category Not Saved",HttpStatus.INTERNAL_SERVER_ERROR);
+           //return new ResponseEntity<>("Not Saved",HttpStatus.INTERNAL_SERVER_ERROR);
 
        }
    }
@@ -44,7 +47,8 @@ public class CategoryController {
 
         return ResponseEntity.noContent().build();
     }else{
-         return new ResponseEntity<>(allCategory,HttpStatus.OK);
+         return CommonUtil.createBuildResponse(allCategory,HttpStatus.OK);
+         //return new ResponseEntity<>(allCategory,HttpStatus.OK);
      }
 
 }
@@ -58,7 +62,7 @@ public ResponseEntity<?> getActiveCategory(){
 
         return ResponseEntity.noContent().build();
     }else{
-        return new  ResponseEntity<>(activeCategory,HttpStatus.OK);
+        return CommonUtil.createBuildResponse(activeCategory,HttpStatus.FOUND);
     }
 
 }
@@ -67,19 +71,26 @@ public ResponseEntity<?> getActiveCategory(){
 public ResponseEntity<?> getCategoryById(@PathVariable Integer id) throws Exception {
     CategoryDTO categoryDTO = service.getCategoryById(id);
     if (ObjectUtils.isEmpty(categoryDTO)) {
-        return new ResponseEntity<>("Category not found with id " + id, HttpStatus.NOT_FOUND);
+        return CommonUtil.createErrorResponseMessage("Category not found with id " + id, HttpStatus.NOT_FOUND);
+
+        //return new ResponseEntity<>("Category not found with id " + id, HttpStatus.NOT_FOUND);
 
     }
-    return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
+
+    return CommonUtil.createBuildResponse(categoryDTO,HttpStatus.OK);
+    //return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
 }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategoryById(@PathVariable Integer id) {
         Boolean deleted = service.deleteCategory(id);
         if (deleted) {
-            return new ResponseEntity<>("Category deleted success", HttpStatus.OK);
+            return CommonUtil.createBuildResponseMessage("Category deleted success", HttpStatus.OK,null);
+            // return new ResponseEntity<>("Category deleted success", HttpStatus.OK);
         }
-        return new ResponseEntity<>("Category Not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
+        return CommonUtil.createErrorResponseMessage("Category Not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // return new ResponseEntity<>("Category Not deleted", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
