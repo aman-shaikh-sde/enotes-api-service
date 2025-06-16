@@ -23,4 +23,5 @@ public class Category extends BaseModel{
     private Boolean isActive;
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted = false;
+
 }
