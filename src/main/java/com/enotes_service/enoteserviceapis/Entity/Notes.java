@@ -1,14 +1,18 @@
 package com.enotes_service.enoteserviceapis.Entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+
 public class Notes extends BaseModel {
 
     @Id
@@ -16,6 +20,9 @@ public class Notes extends BaseModel {
     private Integer id;
     private String description;
     private String title;
+    @ManyToOne
     private Category category;
+    @ManyToOne
+    private FileDetails fileDetails;
 
 }
