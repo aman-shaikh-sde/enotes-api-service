@@ -3,6 +3,7 @@ package com.enotes_service.enoteserviceapis.Service.ServiceImpl;
 import com.enotes_service.enoteserviceapis.DTOS.NotesDTO;
 import com.enotes_service.enoteserviceapis.Entity.FileDetails;
 import com.enotes_service.enoteserviceapis.Entity.Notes;
+import com.enotes_service.enoteserviceapis.Exception.ResourceNotFoundException;
 import com.enotes_service.enoteserviceapis.Repository.FileRepo;
 import com.enotes_service.enoteserviceapis.Repository.NotesRepo;
 import com.enotes_service.enoteserviceapis.Service.NotesService;
@@ -14,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.FileNameMap;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -61,7 +65,7 @@ public class NotesServiceImpl implements NotesService {
     }
     private FileDetails saveFile(MultipartFile file) throws IOException {
         if ( !ObjectUtils.isEmpty(file) && !file.isEmpty()) {
-            String originalName = file.getOriginalFilename();  
+            String originalName = file.getOriginalFilename();
 
 
             if (originalName == null || originalName.isEmpty()) {
@@ -95,6 +99,15 @@ public class NotesServiceImpl implements NotesService {
         return null;
     }
 
+    @Override
+    public byte[] downloadFile(FileDetails fileDetails) throws Exception {
+
+        InputStream io= new FileInputStream(fileDetails.getPath());
+        return StreamUtils.copyToByteArray(io);
+
+    }
+
+
     private String getOriginalName(String originalName) {
         String extension = FilenameUtils.getExtension(originalName);
         String fileName = FilenameUtils.removeExtension(originalName);
@@ -113,5 +126,13 @@ public class NotesServiceImpl implements NotesService {
 
 
         return getNotes;
+    }
+
+
+    @Override
+    public FileDetails getFileDetails(Integer id) throws Exception{
+        FileDetails fileDetails=fileRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Id Not Found"));
+
+        return fileDetails;
     }
 }
