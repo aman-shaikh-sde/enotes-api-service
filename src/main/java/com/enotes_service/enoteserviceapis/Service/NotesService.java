@@ -9,5 +9,7 @@ import java.util.List;
 public interface NotesService {
 
     public NotesDTO saveNotes(String notes, MultipartFile file)throws Exception;
-    public List<NotesDTO> getNotes();
+    public List<NotesDTO> getNotes(Integer pageNumber,Integer pageSize);
+
+    List<NotesDTO> getNotesByUser(Integer id);
 }

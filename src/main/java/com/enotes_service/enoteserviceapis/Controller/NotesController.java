@@ -9,6 +9,9 @@ import com.enotes_service.enoteserviceapis.Service.ServiceImpl.NotesServiceImpl;
 import com.enotes_service.enoteserviceapis.Util.CommonUtil;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -39,11 +42,25 @@ public class NotesController {
     }
 
     @GetMapping("/notes")
-    public ResponseEntity<?> getNotes() {
-        List<NotesDTO> allNotes = service.getNotes();
+    public ResponseEntity<?> getNotes(@RequestParam(value = "pageNumber" ,defaultValue = "0") Integer pageNumber,
+                                      @RequestParam(value = "pageSize",defaultValue = "5") Integer pageSize) {
+
+        List<NotesDTO> allNotes = service.getNotes(pageNumber,pageSize);
         if (!CollectionUtils.isEmpty(allNotes)) {
             return CommonUtil.createBuildResponse(allNotes, HttpStatus.OK);
         }
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/notes-user/{id}")
+    public ResponseEntity<?> getNotesByUser(@PathVariable Integer id){
+
+        List<NotesDTO> notesDTO=service.getNotesByUser(id);
+        if(!CollectionUtils.isEmpty(notesDTO)){
+            return CommonUtil.createBuildResponse(notesDTO, HttpStatus.OK);
+        }
+        return ResponseEntity.noContent().build();
+
+        }
+
 }
