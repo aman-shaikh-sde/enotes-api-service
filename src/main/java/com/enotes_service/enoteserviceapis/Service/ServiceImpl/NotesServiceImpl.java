@@ -13,6 +13,9 @@ import org.aspectj.util.FileUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StreamUtils;
@@ -119,9 +122,12 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public List<NotesDTO> getNotes() {
+    public List<NotesDTO> getNotes(Integer pageNumber,Integer pageSize) {
 
-        List<Notes> notes = notesRepo.findAll();
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+        Page<Notes> page=this.notesRepo.findAll(pageable);
+        List<Notes> notes=page.getContent();
+
         List<NotesDTO> getNotes = notes.stream().map(note -> mapper.map(note, NotesDTO.class)).toList();
 
 
@@ -130,9 +136,17 @@ public class NotesServiceImpl implements NotesService {
 
 
     @Override
+    public List<NotesDTO> getNotesByUser(Integer id) {
+        List<Notes> notes=notesRepo.findByCreatedBy(id);
+        List<NotesDTO> allnotesByUser=notes.stream().map(note->mapper.map(note,NotesDTO.class)).toList();
+        return allnotesByUser;
+
+
+    @Override
     public FileDetails getFileDetails(Integer id) throws Exception{
         FileDetails fileDetails=fileRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Id Not Found"));
 
         return fileDetails;
+
     }
 }
