@@ -1,6 +1,7 @@
 package com.enotes_service.enoteserviceapis.Service.ServiceImpl;
 
 import com.enotes_service.enoteserviceapis.DTOS.NotesDTO;
+import com.enotes_service.enoteserviceapis.DTOS.NotesResponse;
 import com.enotes_service.enoteserviceapis.Entity.FileDetails;
 import com.enotes_service.enoteserviceapis.Entity.Notes;
 import com.enotes_service.enoteserviceapis.Exception.ResourceNotFoundException;
@@ -43,6 +44,8 @@ public class NotesServiceImpl implements NotesService {
 
     @Autowired
     private ModelMapper mapper;
+
+
 
     @Value("${file.upload.path}")
     private String uploadPath;
@@ -122,24 +125,32 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
+    public NotesResponse getAllNotesByUser(Integer userId, Integer pageNo, Integer pageSize) {
+        // 10 = 5,5 = 2 pages
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Notes> pageNotes = notesRepo.findByCreatedBy(userId, pageable);
+
+        List<NotesDTO> notesDto = pageNotes.get().map(n -> mapper.map(n, NotesDTO.class)).toList();
+
+        NotesResponse notes = NotesResponse.builder().notes(notesDto).pageNo(pageNotes.getNumber())
+                .pageSize(pageNotes.getSize()).totalElements((int) pageNotes.getTotalElements())
+                .totalPage(pageNotes.getTotalPages()).isFirst(pageNotes.isFirst()).isLast(pageNotes.isLast()).build();
+
+        return notes;
+    }
+    @Override
     public List<NotesDTO> getNotes(Integer pageNumber,Integer pageSize) {
 
         Pageable pageable= PageRequest.of(pageNumber,pageSize);
         Page<Notes> page=this.notesRepo.findAll(pageable);
         List<Notes> notes=page.getContent();
 
-        List<NotesDTO> getNotes = notes.stream().map(note -> mapper.map(note, NotesDTO.class)).toList();
 
+        List<NotesDTO> getNotes = notes.stream().map(note -> mapper.map(note, NotesDTO.class)).toList();
 
         return getNotes;
     }
 
-
-    @Override
-    public List<NotesDTO> getNotesByUser(Integer id) {
-        List<Notes> notes=notesRepo.findByCreatedBy(id);
-        List<NotesDTO> allnotesByUser=notes.stream().map(note->mapper.map(note,NotesDTO.class)).toList();
-        return allnotesByUser;
 
 
     @Override
