@@ -2,6 +2,7 @@ package com.enotes_service.enoteserviceapis.Controller;
 
 import com.enotes_service.enoteserviceapis.DTOS.CategoryDTO;
 import com.enotes_service.enoteserviceapis.DTOS.NotesDTO;
+import com.enotes_service.enoteserviceapis.DTOS.NotesResponse;
 import com.enotes_service.enoteserviceapis.Entity.Category;
 import com.enotes_service.enoteserviceapis.Entity.FileDetails;
 import com.enotes_service.enoteserviceapis.Entity.Notes;
@@ -71,15 +72,16 @@ public class NotesController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/notes-user/{id}")
-    public ResponseEntity<?> getNotesByUser(@PathVariable Integer id){
+    @GetMapping("/user-notes")
+    public ResponseEntity<?> getAllNotesByUser(@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
+                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        Integer userId = 2;
+        NotesResponse notes = service.getAllNotesByUser(userId,pageNo,pageSize);
+//		if (CollectionUtils.isEmpty(notes)) {
+//			return ResponseEntity.noContent().build();
+//		}
+        return CommonUtil.createBuildResponse(notes, HttpStatus.OK);
+    }
 
-        List<NotesDTO> notesDTO=service.getNotesByUser(id);
-        if(!CollectionUtils.isEmpty(notesDTO)){
-            return CommonUtil.createBuildResponse(notesDTO, HttpStatus.OK);
-        }
-        return ResponseEntity.noContent().build();
-
-        }
 
 }
